@@ -833,6 +833,8 @@ export function initStage3() {
         const thoughtEl = document.getElementById('s3thought');
         if (thoughtEl) {
           thoughtEl.textContent = '💭 ' + thoughtText;
+          thoughtEl.style.left = (player.x - camX + player.w / 2) + 'px';
+          thoughtEl.style.top = (player.y - 60) + 'px';
           thoughtEl.style.opacity = '1';
           thoughtEl.style.transition = 'opacity 0.4s';
         }

@@ -65,6 +65,10 @@ export function initStage1() {
   let gameOver = false;
   let collectedCount = 0;
   const TOTAL_FRAGMENTS = tunables.fragments.length;
+  let popupWord = '';
+  let popupX = 0;
+  let popupY = 0;
+  let popupTimer = 0;
 
   // ── Player ──
   const player = {
@@ -607,24 +611,18 @@ export function initStage1() {
   // ─────────────────────────────────────────
   function collectFragment(i: number, word: string) {
     // Update HUD dots
-    const dotEl = document.getElementById('s1dot' + i);
+    const dotEl = document.getElementById('s1d' + i);
     if (dotEl) dotEl.classList.add('collected');
 
     // Update poem lines
-    const lineEl = document.getElementById('s1line' + i);
+    const lineEl = document.getElementById('s1l' + i);
     if (lineEl) lineEl.classList.add('found');
 
-    // Show popup
-    const popup = document.getElementById('s1word_flash')
-      || document.getElementById('s1word_popup');
-    if (popup) {
-      popup.textContent = word;
-      popup.style.fontSize = tunables.popupFontSize + 'px';
-      popup.style.left = (fragments[i].x - camX) + 'px';
-      popup.style.top  = (fragments[i].y - 10) + 'px';
-      popup.classList.add('show');
-      setTimeout(() => popup.classList.remove('show'), tunables.popupFadeMs);
-    }
+    // Canvas popup data
+    popupWord = word;
+    popupX = fragments[i].x;
+    popupY = fragments[i].y - 10;
+    popupTimer = tunables.popupFadeMs;
 
     // Stage clear check
     if (collectedCount >= TOTAL_FRAGMENTS) {
@@ -668,11 +666,12 @@ export function initStage1() {
 
     // Reset HUD
     for (let i = 0; i < TOTAL_FRAGMENTS; i++) {
-      const d = document.getElementById('s1dot' + i);
+      const d = document.getElementById('s1d' + i);
       if (d) d.classList.remove('collected');
-      const l = document.getElementById('s1line' + i);
+      const l = document.getElementById('s1l' + i);
       if (l) l.classList.remove('found');
     }
+    popupTimer = 0;
 
     // Reset petals
     initPetals();
@@ -709,6 +708,23 @@ export function initStage1() {
     drawFragments();
     drawPlayer();
     drawPetals();
+
+    // ── Popup (canvas-based) ──
+    if (popupTimer > 0) {
+      const elapsed = tunables.popupFadeMs - popupTimer;
+      const progress = elapsed / tunables.popupFadeMs;
+      let alpha = 1;
+      if (progress > 0.7) alpha = 1 - (progress - 0.7) / 0.3;
+      const rise = progress * 30;
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, alpha);
+      ctx.font = tunables.popupFontSize + 'px "Noto Serif KR", serif';
+      ctx.fillStyle = 'rgba(200,240,170,0.95)';
+      ctx.textAlign = 'center';
+      ctx.fillText(popupWord, popupX - camX, popupY - rise);
+      ctx.restore();
+      popupTimer -= 16.67;
+    }
 
     // Stage clear check (stop loop)
     if (collectedCount >= TOTAL_FRAGMENTS && gameOver) {
