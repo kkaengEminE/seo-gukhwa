@@ -99,7 +99,7 @@ export function initStage1() {
       { x: 2560, y: groundY - 120, w: 150, h: 14 },
       { x: 2850, y: groundY - 70,  w: 140, h: 14 },
     ];
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
   }
   buildWorld();
 
@@ -657,9 +657,10 @@ export function initStage1() {
 
     // Reset player position
     player.x = tunables.playerStartX;
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
     player.vy = 0;
     player.vx = 0;
+    player.onGround = true;
     player.walkTimer = 0;
 
     // Reset fragments

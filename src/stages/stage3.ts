@@ -107,7 +107,7 @@ export function initStage3() {
       { x: 2500, y: groundY - 200, w: 150, h: 18 },
       { x: 2650, y: groundY - 250, w: 160, h: 18 },
     ];
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
 
     // 오브젝트 위치 재설정
     inspectableObjects[0].x = 800;
@@ -285,14 +285,14 @@ export function initStage3() {
 
     // 플레이어 위치 초기화
     player.x = tunables.playerStartX;
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
     player.vy = 0;
     player.vx = 0;
     player.dir = 1;
     player.walkFrame = 0;
     player.walkTimer = 0;
     player.breathPhase = 0;
-    player.onGround = false;
+    player.onGround = true;
 
     // 파편 초기화
     buildWorld();

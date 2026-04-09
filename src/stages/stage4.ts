@@ -98,7 +98,7 @@ export function initStage4() {
       { x: 1900, y: groundY - 60,  w: 150, h: 12 },
       { x: 2400, y: groundY - 50,  w: 170, h: 12 },
     ];
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
   }
   buildWorld();
 
@@ -859,9 +859,10 @@ export function initStage4() {
     buildWorld();
     updateChrysanthemumPos();
     player.x = tunables.playerStartX;
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
     player.vy = 0;
     player.vx = 0;
+    player.onGround = true;
     player.dir = 1;
     player.walkTimer = 0;
 

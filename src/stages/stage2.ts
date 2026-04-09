@@ -116,7 +116,7 @@ export function initStage2() {
       { x: 2500, y: groundY - 170, w: 120, h: 18 },
       { x: 2720, y: groundY - 120, w: 130, h: 18 },
     ];
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
   }
   buildWorld();
 
@@ -207,10 +207,10 @@ export function initStage2() {
 
     // Player reset
     player.x = tunables.playerStartX;
-    player.y = groundY + tunables.playerStartY;
+    player.y = groundY - player.h;
     player.vy = 0;
     player.vx = 0;
-    player.onGround = false;
+    player.onGround = true;
     player.dir = 1;
     player.walkFrame = 0;
     player.walkTimer = 0;
@@ -296,7 +296,7 @@ export function initStage2() {
     // Fall off bottom
     if (player.y > H + 100) {
       player.x = tunables.playerStartX;
-      player.y = groundY + tunables.playerStartY;
+      player.y = groundY - player.h;
       player.vy = 0;
       player.vx = 0;
     }
